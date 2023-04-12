@@ -29,7 +29,6 @@ struct FastScrollerView: View {
                             }
                     )
             }
-            .responsiveWidth(0.9)
         }
     }
     

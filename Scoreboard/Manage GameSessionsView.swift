@@ -41,7 +41,6 @@ struct ManageGameSessionsView: View {
                 games = loadGamesFromUserDefaults()
             }
         }
-        .responsiveWidth(0.9)
     }
     
     func deleteGame(game: Game) {

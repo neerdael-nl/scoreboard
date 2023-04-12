@@ -1,5 +1,6 @@
 import SwiftUI
 
+
 struct SettingsView: View {
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var scoreboardData: ScoreboardData
@@ -25,6 +26,13 @@ struct SettingsView: View {
                     NavigationLink(destination: ManageGameSessionsView(games: $scoreboardData.games)) { // Update this line
                         Text("Edit Game Sessions")
                     }
+                }
+                
+                Section(header: Text("Manage Game Librart")) {
+                    NavigationLink(destination: ManageBoardGamesView(boardGames: $boardGames)) {
+                        Text("Manage Board Games")
+                    }
+
                 }
                 
                 Section(header: Text("BoardGameGeek")) {
@@ -62,7 +70,6 @@ struct SettingsView: View {
                     )
                 }
             }
-            .responsiveWidth(0.9)
             .navigationBarTitle("Settings")
         }
     }

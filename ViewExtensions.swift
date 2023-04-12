@@ -10,6 +10,9 @@ extension View {
     func focusable() -> some View {
         self.background(ResponderEnablingView())
     }
+    func responsiveWidth(_ widthRatio: CGFloat) -> some View {
+        self.modifier(ResponsiveViewModifier(widthRatio: widthRatio))
+    }
 }
 
 private struct ResponderEnablingView: UIViewRepresentable {
@@ -20,4 +23,15 @@ private struct ResponderEnablingView: UIViewRepresentable {
     }
 
     func updateUIView(_ uiView: UIView, context: Context) {}
+}
+
+private struct ResponsiveViewModifier: ViewModifier {
+    let widthRatio: CGFloat
+
+    func body(content: Content) -> some View {
+        GeometryReader { geometry in
+            content
+                .frame(width: geometry.size.width * widthRatio)
+        }
+    }
 }

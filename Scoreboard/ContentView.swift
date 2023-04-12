@@ -3,7 +3,9 @@ import SwiftUI
 struct ContentView: View {
     @EnvironmentObject var scoreboardData: ScoreboardData
     @State private var players: [Player] = loadPlayersFromUserDefaults()
-    @State private var bggGames: [BGG] = [] // Change to store the selected game object
+    @State private var games: [Game] = []
+    @State private var boardGames: [BGG] = []
+
 
 
 
@@ -29,9 +31,12 @@ struct ContentView: View {
                         }
                     }
                 }
+                .onAppear {
+                    boardGames = loadBGGFromUserDefaults()
+                }
                 
                 // Add Game Button
-                NavigationLink(destination: AddGameView(players: $scoreboardData.players, games: $scoreboardData.games, bggGames: bggGames)) {
+                NavigationLink(destination: AddGameView(players: $players, games: $games, boardGames: $boardGames)) {
                     Text("Add Game")
                         .padding()
                 }

@@ -1,5 +1,6 @@
 import SwiftUI
 
+
 func ordinal(_ n: Int) -> String {
     let formatter = NumberFormatter()
     formatter.numberStyle = .ordinal
@@ -34,7 +35,6 @@ struct AddGameView: View {
     @Binding var games: [Game]
     @State private var selectedPositions: [Player: Int] = [:]
     @State private var participatingPlayers: Set<Player> = []
-    @State private var gameName = ""
     @Environment(\.presentationMode) var presentationMode
     @State private var selectedGameIndex = 0
     @State private var selectedGame: BGG? // Add this line
@@ -43,27 +43,13 @@ struct AddGameView: View {
     @State private var gameDate = Date() // new state variable for the game date
     @State private var currentStep: Int = 1
     @State private var isExpanded = false
-    @State private var bggGames: [BGG] = [] // Change to store the selected game object
-    
-    
-    init(players: Binding<[Player]>, games: Binding<[Game]>, bggGames: [BGG]) {
+    @Binding var boardGames: [BGG]
+  
+    init(players: Binding<[Player]>, games: Binding<[Game]>, boardGames: Binding<[BGG]>) {
         self._players = players
         self._games = games
-        self._bggGames = State(initialValue: bggGames)
-    }
-    
-    
-    func loadBGGFromUserDefaults() -> [BGG] {
-        if let data = UserDefaults.standard.data(forKey: "bggGames") {
-            do {
-                let decoder = JSONDecoder()
-                let bggGames = try decoder.decode([BGG].self, from: data)
-                return bggGames
-            } catch {
-                print("Error decoding BGG games: \(error)")
-            }
-        }
-        return []
+        self._boardGames = boardGames // Update this line
+        self._selectedGame = State(initialValue: boardGames.wrappedValue.first)
     }
     
     func gameSelectionView(scrollViewProxy: ScrollViewProxy) -> some View {
@@ -73,11 +59,11 @@ struct AddGameView: View {
                     Text("Select Game")
                         .font(.title)
                         .padding()
-                    
+
                     ScrollView {
-                        List {
+                        LazyVStack(alignment: .leading, spacing: 20) {
                             ForEach(gameSections(), id: \.0) { section in
-                                Section(header: Text(section.0)) {
+                                Section(header: Text(section.0).frame(maxWidth: .infinity, alignment: .leading)) {
                                     ForEach(section.1, id: \.id) { game in
                                         Button(action: {
                                             selectedGame = game
@@ -95,11 +81,11 @@ struct AddGameView: View {
                                 }
                             }
                         }
-                        .listStyle(PlainListStyle())
+                        .padding(.top)
                     }
                 }
                 .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
-                
+
                 VStack {
                     ForEach(0..<alphabet.count, id: \.self) { index in
                         Button(action: {
@@ -118,10 +104,13 @@ struct AddGameView: View {
                 .padding(.trailing)
             }
         }
-    }
+    }   
+
+
+
     
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
             if currentStep == 1 {
                 ScrollViewReader { scrollViewProxy in
                     gameSelectionView(scrollViewProxy: scrollViewProxy)
@@ -133,16 +122,16 @@ struct AddGameView: View {
             } else if currentStep == 4 {
                 overviewView()
             }
-            
+
             HStack {
                 if currentStep > 1 {
                     Button("Previous") {
                         currentStep -= 1
                     }
                 }
-                
+
                 Spacer()
-                
+
                 if currentStep < 4 {
                     Button("Next") {
                         if currentStep == 2 {
@@ -150,77 +139,19 @@ struct AddGameView: View {
                         }
                         currentStep += 1
                     }
-                    .disabled(currentStep == 1 && !isGameNameValid)
+                    .disabled(currentStep == 1 && selectedGame == nil) // Change the validation condition here
                 } else {
                     Button("Confirm") {
                         saveGame()
                         presentationMode.wrappedValue.dismiss()
                     }
-                    .disabled(participatingPlayers.isEmpty || !isGameNameValid)
+                    .disabled(participatingPlayers.isEmpty || selectedGame == nil) // Change the validation condition here
                 }
             }
             .padding()
         }
+        .padding()
     }
-    func actionView(scrollViewProxy: ScrollViewProxy) -> some View {
-        GeometryReader { geometry in
-            ZStack(alignment: .topTrailing) {
-                VStack {
-                    Text("Select Game")
-                        .font(.title)
-                        .padding()
-                    
-                    ScrollView {
-                        ScrollViewReader { scrollViewProxy in
-                            List {
-                                ForEach(gameSections(), id: \.0) { section in
-                                    Section(header: Text(section.0)) {
-                                        ForEach(section.1, id: \.id) { game in
-                                            Button(action: {
-                                                selectedGame = game
-                                            }) {
-                                                HStack {
-                                                    Text(game.name)
-                                                    Spacer()
-                                                    if selectedGame?.id == game.id {
-                                                        Image(systemName: "checkmark")
-                                                            .foregroundColor(.blue)
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            .listStyle(PlainListStyle())
-                        }
-                    }
-                }
-                .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
-                
-                VStack {
-                    ForEach(0..<alphabet.count, id: \.self) { index in
-                        Button(action: {
-                            withAnimation {
-                                scrollToLetter(proxy: scrollViewProxy, at: index)
-                            }
-                        }) {
-                            Text(String(alphabet[index]))
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 4)
-                        }
-                    }
-                    
-                }
-                .background(Color(.systemGray6))
-                .cornerRadius(8)
-                .padding(.trailing)
-            }
-        }
-    }
-    
-    
-    
     
     func participantSelectionView() -> some View {
         VStack {
@@ -268,7 +199,7 @@ struct AddGameView: View {
         .animation(.easeInOut(duration: 0.25))
     }
     var isGameNameValid: Bool {
-        return !(gameName.isEmpty) && (selectedGameIndex > 0 || !participatingPlayers.isEmpty)
+        return (selectedGame?.name ?? "").isEmpty && (selectedGameIndex > 0 || !participatingPlayers.isEmpty)
     }
     
     
@@ -343,20 +274,13 @@ struct AddGameView: View {
         formatter.dateStyle = .medium
         return formatter.string(from: date)
     }
+    
     private func gameSections() -> [(String, [BGG])] {
-        let sortedGames = bggGames.sorted { $0.name < $1.name }
-        var sections: [String: [BGG]] = [:]
-        
-        for game in sortedGames {
-            let firstLetter = String(game.name.prefix(1)).uppercased()
-            if sections[firstLetter] == nil {
-                sections[firstLetter] = []
-            }
-            sections[firstLetter]?.append(game)
-        }
-        print(sortedGames)
-        
-        return sections.sorted { $0.0 < $1.0 }
+        let sortedGames = boardGames.sorted { $0.name < $1.name }
+        let groupedGames = Dictionary(grouping: sortedGames, by: { String($0.name.prefix(1)).uppercased() })
+        let sections = groupedGames.sorted { $0.0 < $1.0 }
+        print("Sections: \(sections)")
+        return sections
     }
     
     // Fast scroller functionality
@@ -374,7 +298,7 @@ struct AddGameView: View {
     
     
     private func saveGame() {
-        if (selectedGame?.name.isEmpty == true || gameName.isEmpty) || participatingPlayers.count < 2 || _games.wrappedValue.contains(where: { $0.name == gameName || $0.name == selectedGame?.name }) {
+        if (selectedGame?.name ?? "").isEmpty == true || (selectedGame?.name ?? "").isEmpty || participatingPlayers.count < 2 || _games.wrappedValue.contains(where: { $0.name == selectedGame?.name || $0.name == selectedGame?.name }) {
             showAlert = true
             return
         }
@@ -386,7 +310,7 @@ struct AddGameView: View {
             return PlayerResult(player: player, position: index + 1, score: score)
         }
         
-        let newGame = Game(name: selectedGame?.name ?? gameName, playerResults: playerResults)
+        let newGame = Game(name: selectedGame?.name ?? "", playerResults: playerResults)
         games.append(newGame)
         saveGamesToUserDefaults(games: games)
         

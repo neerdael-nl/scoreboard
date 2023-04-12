@@ -3,101 +3,54 @@ import SwiftUI
 struct ManagePlayersView: View {
     @Binding var players: [Player]
     @State private var newPlayerName: String = ""
-    @FocusState private var isFocused: Bool
-    @State private var showingDuplicateAlert = false
-    
+    @State private var showingAddPlayerSheet = false
+    @State private var showAlert = false
+    @State private var alertMessage = ""
+
     var body: some View {
         VStack {
             List {
-                HStack {
-                    TextField("Add a new player", text: $newPlayerName, onCommit: {
-                        if !newPlayerName.isEmpty {
-                            addPlayer()
+                ForEach(players, id: \.id) { player in
+                    Text(player.name)
+                }
+                .onDelete(perform: deletePlayer)
+            }
+
+            Button("Add Player") {
+                showingAddPlayerSheet.toggle()
+            }
+            .sheet(isPresented: $showingAddPlayerSheet) {
+                VStack {
+                    TextField("Player Name", text: $newPlayerName)
+                        .padding()
+
+                    Button("Save") {
+                        if newPlayerName.isEmpty {
+                            alertMessage = "Player name cannot be empty."
+                            showAlert = true
+                        } else if players.contains(where: { $0.name.lowercased() == newPlayerName.lowercased() }) {
+                            alertMessage = "Player already exists."
+                            showAlert = true
+                        } else {
+                            let newPlayer = Player(name: newPlayerName)
+                            players.append(newPlayer)
+                            savePlayersToUserDefaults(players: players)
                             newPlayerName = ""
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                isFocused = true
-                            }
-                        }
-                    })
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .focused($isFocused)
-
-                    Button(action: {
-                        if !newPlayerName.isEmpty {
-                            addPlayer()
-                        }
-                    }) {
-                        Image(systemName: "plus.circle.fill")
-                            .foregroundColor(.green)
-                            .imageScale(.large)
-                    }
-                }
-                .padding()
-
-                ForEach(players) { player in
-                    HStack {
-                        TextField("Edit player name", text: Binding(
-                            get: { player.name },
-                            set: { newValue in
-                                if let index = players.firstIndex(where: { $0.id == player.id }) {
-                                    players[index].name = newValue
-                                    savePlayersToUserDefaults(players: players)
-                                }
-                            }
-                        ))
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        
-                        Spacer()
-                        
-                        Button(action: {
-                            deletePlayer(player: player)
-                        }) {
-                            Image(systemName: "trash")
-                                .foregroundColor(.red)
+                            showingAddPlayerSheet.toggle()
                         }
                     }
-                    .padding(.horizontal)
+                    .padding()
+                    .alert(isPresented: $showAlert) {
+                        Alert(title: Text("Error"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+                    }
                 }
             }
-            .navigationBarTitle("Manage Players")
-            .alert(isPresented: $showingDuplicateAlert) {
-                Alert(title: Text("Duplicate Name"),
-                      message: Text("Player names must be unique."),
-                      dismissButton: .default(Text("OK")) {
-                        newPlayerName = ""
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                            isFocused = true
-                        }
-                      })
-            }
         }
-        .responsiveWidth(0.9)
-        .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                isFocused = true
-            }
-        }
+        .navigationBarTitle("Manage Players")
     }
-    
-    private func addPlayer() {
-        // Check if the player name already exists
-        guard !players.contains(where: { $0.name.lowercased() == newPlayerName.lowercased() }) else {
-            showingDuplicateAlert = true
-            return
-        }
-        
-        let newPlayer = Player(name: newPlayerName)
-        players.append(newPlayer)
-        savePlayersToUserDefaults(players: players)
-        newPlayerName = ""
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            isFocused = true
-        }
-    }
-    
-    private func deletePlayer(player: Player) {
-        players.removeAll { $0.id == player.id }
+
+    private func deletePlayer(at offsets: IndexSet) {
+        players.remove(atOffsets: offsets)
         savePlayersToUserDefaults(players: players)
     }
 }

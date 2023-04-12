@@ -30,7 +30,6 @@ struct PlayerDetailView: View {
                     }
                 }
             }
-            .responsiveWidth(0.9)
             .navigationBarTitle(player.name)
         }
     }

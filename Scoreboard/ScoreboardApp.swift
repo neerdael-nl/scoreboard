@@ -23,14 +23,15 @@ struct ScoreboardApp: App {
                     .environmentObject(scoreboardData)
                     .preferredColorScheme(.dark)
             }
-            .responsiveWidth(0.9)
         }
     }
 }
 
+
 struct BoardGame {
     let id: String
     let name: String
+
 }
 
 class BoardGameXMLParser: NSObject, XMLParserDelegate {
@@ -61,8 +62,7 @@ class BoardGameXMLParser: NSObject, XMLParserDelegate {
 
     func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
         if elementName == "name" {
-            let trimmedName = currentName.trimmingCharacters(in: .whitespacesAndNewlines)
-            games.append(BoardGame(id: currentID, name: trimmedName))
+            games.append(BoardGame(id: currentID, name: currentName))
             currentName = ""
         }
     }
@@ -83,21 +83,3 @@ func fetchBoardGames(username: String, completion: @escaping ([BGG]) -> Void) {
     }.resume()
 }
 
-struct ResponsiveViewModifier: ViewModifier {
-    let widthRatio: CGFloat
-
-    func body(content: Content) -> some View {
-        GeometryReader { geometry in
-            content
-                .frame(width: geometry.size.width * widthRatio)
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-        }
-    }
-}
-
-
-extension View {
-    func responsiveWidth(_ widthRatio: CGFloat) -> some View {
-        self.modifier(ResponsiveViewModifier(widthRatio: widthRatio))
-    }
-}

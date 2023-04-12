@@ -145,10 +145,14 @@ func saveBGGToUserDefaults(boardGames: [BGG]) {
 }
 
 func loadBGGFromUserDefaults() -> [BGG] {
-    if let data = UserDefaults.standard.data(forKey: "boardGames"),
-       let boardGames = try? JSONDecoder().decode([BGG].self, from: data) {
-        return boardGames
-    } else {
-        return []
+    if let data = UserDefaults.standard.data(forKey: "boardGames") {
+        do {
+            let decoder = JSONDecoder()
+            let boardGames = try decoder.decode([BGG].self, from: data)
+            return boardGames
+        } catch {
+            print("Error decoding BGG games: \(error)")
+        }
     }
+    return []
 }
