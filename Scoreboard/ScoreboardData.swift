@@ -1,20 +1,16 @@
-//
-//  ScoreboardData.swift
-//  Scoreboard
-//
-//  Created by John Neerdael on 09/04/2023.
-//
-
 import SwiftUI
+import Combine
 
-struct ScoreboardData: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
-}
+class ScoreboardData: ObservableObject {
+    @Published var players: [Player]
+    @Published var games: [Game]
+    @Published var scores: [Int] = [4, 3, 2, 1] // Add this line
 
-struct ScoreboardData_Previews: PreviewProvider {
-    static var previews: some View {
-        ScoreboardData()
+    //
+
+
+    init() {
+        self.players = loadPlayersFromUserDefaults()
+        self.games = loadGamesFromUserDefaults()
     }
 }

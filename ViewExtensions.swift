@@ -1,20 +1,23 @@
-//
-//  ViewExtensions.swift
-//  Scoreboard
-//
-//  Created by John Neerdael on 12/04/2023.
-//
-
 import SwiftUI
 
-struct ViewExtensions: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+extension UIView {
+    func focus() {
+        becomeFirstResponder()
     }
 }
 
-struct ViewExtensions_Previews: PreviewProvider {
-    static var previews: some View {
-        ViewExtensions()
+extension View {
+    func focusable() -> some View {
+        self.background(ResponderEnablingView())
     }
+}
+
+private struct ResponderEnablingView: UIViewRepresentable {
+    func makeUIView(context: Context) -> UIView {
+        let view = UIView(frame: .zero)
+        view.isUserInteractionEnabled = false
+        return view
+    }
+
+    func updateUIView(_ uiView: UIView, context: Context) {}
 }
