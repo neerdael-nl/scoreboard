@@ -7,13 +7,24 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		860736D429E3D3A700866FCD /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 860736D329E3D3A700866FCD /* SettingsView.swift */; };
+		860736D629E464BC00866FCD /* PlayerGameHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 860736D529E464BC00866FCD /* PlayerGameHistoryView.swift */; };
+		860736DA29E4904800866FCD /* ManagePlayersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 860736D929E4904800866FCD /* ManagePlayersView.swift */; };
+		860736DC29E4908000866FCD /* Manage GameSessionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 860736DB29E4908000866FCD /* Manage GameSessionsView.swift */; };
+		860736DE29E4A78F00866FCD /* PlayerDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 860736DD29E4A78F00866FCD /* PlayerDetailView.swift */; };
+		860736E029E4DA9300866FCD /* FastScrollerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 860736DF29E4DA9300866FCD /* FastScrollerView.swift */; };
 		861F1F7129E3065E009C8648 /* ScoreboardApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861F1F7029E3065E009C8648 /* ScoreboardApp.swift */; };
 		861F1F7329E3065E009C8648 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861F1F7229E3065E009C8648 /* ContentView.swift */; };
 		861F1F7529E30667009C8648 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 861F1F7429E30667009C8648 /* Assets.xcassets */; };
-		861F1F7829E30667009C8648 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 861F1F7729E30667009C8648 /* Preview Assets.xcassets */; };
 		861F1F8229E30667009C8648 /* ScoreboardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861F1F8129E30667009C8648 /* ScoreboardTests.swift */; };
 		861F1F8C29E30667009C8648 /* ScoreboardUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861F1F8B29E30667009C8648 /* ScoreboardUITests.swift */; };
 		861F1F8E29E30667009C8648 /* ScoreboardUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861F1F8D29E30667009C8648 /* ScoreboardUITestsLaunchTests.swift */; };
+		861F1F9D29E307FC009C8648 /* AddGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861F1F9C29E307FC009C8648 /* AddGameView.swift */; };
+		861F1FA129E3081D009C8648 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861F1FA029E3081D009C8648 /* Models.swift */; };
+		861F1FA429E3084F009C8648 /* AddPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861F1FA329E3084F009C8648 /* AddPlayerView.swift */; };
+		861F1FA629E31325009C8648 /* ScoreboardData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861F1FA529E31325009C8648 /* ScoreboardData.swift */; };
+		86DC0B2929E32DA000D5A4B6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 861F1F7429E30667009C8648 /* Assets.xcassets */; };
+		86DC0B2A29E32DA100D5A4B6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 861F1F7429E30667009C8648 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +45,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		860736D329E3D3A700866FCD /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		860736D529E464BC00866FCD /* PlayerGameHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerGameHistoryView.swift; sourceTree = "<group>"; };
+		860736D929E4904800866FCD /* ManagePlayersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagePlayersView.swift; sourceTree = "<group>"; };
+		860736DB29E4908000866FCD /* Manage GameSessionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Manage GameSessionsView.swift"; sourceTree = "<group>"; };
+		860736DD29E4A78F00866FCD /* PlayerDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerDetailView.swift; sourceTree = "<group>"; };
+		860736DF29E4DA9300866FCD /* FastScrollerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastScrollerView.swift; sourceTree = "<group>"; };
 		861F1F6D29E3065E009C8648 /* Scoreboard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Scoreboard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		861F1F7029E3065E009C8648 /* ScoreboardApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreboardApp.swift; sourceTree = "<group>"; };
 		861F1F7229E3065E009C8648 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -44,6 +61,16 @@
 		861F1F8729E30667009C8648 /* ScoreboardUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ScoreboardUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		861F1F8B29E30667009C8648 /* ScoreboardUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreboardUITests.swift; sourceTree = "<group>"; };
 		861F1F8D29E30667009C8648 /* ScoreboardUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreboardUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		861F1F9C29E307FC009C8648 /* AddGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGameView.swift; sourceTree = "<group>"; };
+		861F1FA029E3081D009C8648 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		861F1FA329E3084F009C8648 /* AddPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPlayerView.swift; sourceTree = "<group>"; };
+		861F1FA529E31325009C8648 /* ScoreboardData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreboardData.swift; sourceTree = "<group>"; };
+		86DC0B2129E32B9000D5A4B6 /* boardgame.imageset */ = {isa = PBXFileReference; lastKnownFileType = folder; name = boardgame.imageset; path = Scoreboard/Assets.xcassets/boardgame.imageset; sourceTree = "<group>"; };
+		86DC0B2429E32BAB00D5A4B6 /* boardgame2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = boardgame2.png; sourceTree = "<group>"; };
+		86DC0B2529E32BAB00D5A4B6 /* boardgame2 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "boardgame2 1.png"; sourceTree = "<group>"; };
+		86DC0B2629E32BAB00D5A4B6 /* Contents.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Contents.json; sourceTree = "<group>"; };
+		86DC0B2729E32BAB00D5A4B6 /* boardgame2 2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "boardgame2 2.png"; sourceTree = "<group>"; };
+		9566398529E627950024EC9E /* ViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +101,9 @@
 		861F1F6429E3065E009C8648 = {
 			isa = PBXGroup;
 			children = (
+				9566398529E627950024EC9E /* ViewExtensions.swift */,
+				86DC0B2329E32BAB00D5A4B6 /* background.imageset */,
+				86DC0B2129E32B9000D5A4B6 /* boardgame.imageset */,
 				861F1F6F29E3065E009C8648 /* Scoreboard */,
 				861F1F8029E30667009C8648 /* ScoreboardTests */,
 				861F1F8A29E30667009C8648 /* ScoreboardUITests */,
@@ -94,10 +124,20 @@
 		861F1F6F29E3065E009C8648 /* Scoreboard */ = {
 			isa = PBXGroup;
 			children = (
+				861F1FA029E3081D009C8648 /* Models.swift */,
 				861F1F7029E3065E009C8648 /* ScoreboardApp.swift */,
 				861F1F7229E3065E009C8648 /* ContentView.swift */,
 				861F1F7429E30667009C8648 /* Assets.xcassets */,
 				861F1F7629E30667009C8648 /* Preview Content */,
+				861F1F9C29E307FC009C8648 /* AddGameView.swift */,
+				861F1FA329E3084F009C8648 /* AddPlayerView.swift */,
+				861F1FA529E31325009C8648 /* ScoreboardData.swift */,
+				860736D329E3D3A700866FCD /* SettingsView.swift */,
+				860736D529E464BC00866FCD /* PlayerGameHistoryView.swift */,
+				860736DD29E4A78F00866FCD /* PlayerDetailView.swift */,
+				860736D929E4904800866FCD /* ManagePlayersView.swift */,
+				860736DB29E4908000866FCD /* Manage GameSessionsView.swift */,
+				860736DF29E4DA9300866FCD /* FastScrollerView.swift */,
 			);
 			path = Scoreboard;
 			sourceTree = "<group>";
@@ -125,6 +165,18 @@
 				861F1F8D29E30667009C8648 /* ScoreboardUITestsLaunchTests.swift */,
 			);
 			path = ScoreboardUITests;
+			sourceTree = "<group>";
+		};
+		86DC0B2329E32BAB00D5A4B6 /* background.imageset */ = {
+			isa = PBXGroup;
+			children = (
+				86DC0B2429E32BAB00D5A4B6 /* boardgame2.png */,
+				86DC0B2529E32BAB00D5A4B6 /* boardgame2 1.png */,
+				86DC0B2629E32BAB00D5A4B6 /* Contents.json */,
+				86DC0B2729E32BAB00D5A4B6 /* boardgame2 2.png */,
+			);
+			name = background.imageset;
+			path = Scoreboard/Assets.xcassets/background.imageset;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -231,7 +283,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				861F1F7829E30667009C8648 /* Preview Assets.xcassets in Resources */,
 				861F1F7529E30667009C8648 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -240,6 +291,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				86DC0B2929E32DA000D5A4B6 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -247,6 +299,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				86DC0B2A29E32DA100D5A4B6 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -257,8 +310,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				860736D629E464BC00866FCD /* PlayerGameHistoryView.swift in Sources */,
+				861F1FA429E3084F009C8648 /* AddPlayerView.swift in Sources */,
+				860736D429E3D3A700866FCD /* SettingsView.swift in Sources */,
+				861F1FA629E31325009C8648 /* ScoreboardData.swift in Sources */,
+				860736E029E4DA9300866FCD /* FastScrollerView.swift in Sources */,
+				860736DE29E4A78F00866FCD /* PlayerDetailView.swift in Sources */,
+				860736DA29E4904800866FCD /* ManagePlayersView.swift in Sources */,
+				860736DC29E4908000866FCD /* Manage GameSessionsView.swift in Sources */,
+				861F1F9D29E307FC009C8648 /* AddGameView.swift in Sources */,
 				861F1F7329E3065E009C8648 /* ContentView.swift in Sources */,
 				861F1F7129E3065E009C8648 /* ScoreboardApp.swift in Sources */,
+				861F1FA129E3081D009C8648 /* Models.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -414,12 +477,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Scoreboard/Preview Content\"";
 				DEVELOPMENT_TEAM = 6DF93UDRBJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Friendline Boardgame Scores";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -430,11 +496,14 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.Scoreboard.Scoreboard;
+				PRODUCT_BUNDLE_IDENTIFIER = com.friendlyboardgamesscoring;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -443,12 +512,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Scoreboard/Preview Content\"";
 				DEVELOPMENT_TEAM = 6DF93UDRBJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Friendline Boardgame Scores";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -459,11 +531,14 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.Scoreboard.Scoreboard;
+				PRODUCT_BUNDLE_IDENTIFIER = com.friendlyboardgamesscoring;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
