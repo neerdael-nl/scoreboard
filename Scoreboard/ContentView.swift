@@ -2,51 +2,78 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var scoreboardData: ScoreboardData
-    @State private var players: [Player] = loadPlayersFromUserDefaults()
-    @State private var games: [Game] = []
     @State private var boardGames: [BGG] = []
-
-
-
-
+    @State private var screenWidth: CGFloat = 0
+    @State private var screenHeight: CGFloat = 0
+    
+    private var sortedPlayers: [Player] {
+        scoreboardData.players.sorted(by: { $0.averageScore > $1.averageScore })
+    }
+    
+    private func playerRow(player: Player, index: Int) -> some View {
+            NavigationLink(destination: PlayerDetailView(player: player)) {
+                HStack {
+                    if index == 0 {
+                        Image("gold_cup")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: 24)
+                    } else if index == 1 {
+                        Image("silver_cup")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: 24)
+                    } else if index == 2 {
+                        Image("bronze_cup")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: 24)
+                    }
+                    
+                    Text(player.name)
+                        .background(Color.clear)
+                    Spacer()
+                    Text("\(player.averageScore, specifier: "%.0f") Points")
+                        .background(Color.clear)
+                }
+                .listRowBackground(Color.clear)
+            }
+            .listRowBackground(Color.clear)
+        }
+    
     var body: some View {
         NavigationView {
             VStack {
-                Spacer().frame(height: UIScreen.main.bounds.height * 0.05)
                 // Scoreboard
                 Text("Scoreboard")
                 List {
-                    ForEach(scoreboardData.players.sorted(by: { p1, p2 in
-                        if p1.gamesPlayed == 0 && p2.gamesPlayed == 0 { return false }
-                        if p1.gamesPlayed == 0 { return false }
-                        if p2.gamesPlayed == 0 { return true }
-                        let p1Score = Double(p1.totalPoints) / Double(p1.gamesPlayed)
-                        let p2Score = Double(p2.totalPoints) / Double(p2.gamesPlayed)
-                        return p1Score > p2Score
-                    }), id: \.id) { player in
-                        if player.gamesPlayed > 0 {
-                            NavigationLink(destination: PlayerGameHistoryView(player: player, games: $scoreboardData.games)) {
-                                Text("\(player.name): \(Double(player.totalPoints) / Double(player.gamesPlayed), specifier: "%.1f")")
-                            }
+                    ForEach(sortedPlayers.indices, id: \.self) { index in
+                        if sortedPlayers[index].totalPoints > 0 {
+                            playerRow(player: sortedPlayers[index], index: index)
                         }
                     }
                 }
                 .onAppear {
                     boardGames = loadBGGFromUserDefaults()
                 }
-                
+
                 // Add Game Button
-                NavigationLink(destination: AddGameView(players: $players, games: $games, boardGames: $boardGames)) {
+                NavigationLink(destination: AddGameView(boardGames: $boardGames)) {
                     Text("Add Game")
                         .padding()
                 }
             }
             .navigationBarTitle("Game Ranking", displayMode: .inline)
             .navigationBarItems(trailing:
-                NavigationLink(destination: SettingsView()) {
-                    Image(systemName: "gearshape")
-                }
+                                    NavigationLink(destination: SettingsView()
+                                        .environmentObject(scoreboardData)) {
+                Image(systemName: "gearshape")
+            }
             )
         }
+        .navigationViewStyle(StackNavigationViewStyle()) // Force the NavigationView to use the stack style
+        .environmentObject(scoreboardData) // Add this line
     }
 }
+    
+

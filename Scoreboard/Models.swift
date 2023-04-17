@@ -49,8 +49,14 @@ struct Player: Codable, Equatable, Identifiable, Hashable {
     // Add this computed property to the Player struct
     var averageScore: Double {
         guard gamesPlayed > 0 else { return 0 }
-        return Double(totalPoints) / Double(gamesPlayed) * 10 / 4
+        return Double(totalPoints) / Double(gamesPlayed)
     }
+}
+
+func formattedDate(_ date: Date) -> String {
+    let formatter = DateFormatter()
+    formatter.dateStyle = .medium
+    return formatter.string(from: date)
 }
 
 struct Game: Identifiable, Codable, Hashable {
@@ -64,7 +70,6 @@ struct Game: Identifiable, Codable, Hashable {
         self.id = id
         self.name = name
         self.playerResults = playerResults
-
     }
 
     init(from decoder: Decoder) throws {
@@ -90,10 +95,19 @@ struct PlayerResult: Codable {
 
 }
 
-struct BGG: Codable, Identifiable {
-    let id: String
+struct BGG: Codable, Identifiable, Equatable, Hashable {
     let name: String
+    
+    static func == (lhs: BGG, rhs: BGG) -> Bool {
+        return lhs.name == rhs.name
+    }
+    
+    var id: String {
+        return name
+    }
 }
+
+
 
 
 func savePlayersToUserDefaults(players: [Player]) {

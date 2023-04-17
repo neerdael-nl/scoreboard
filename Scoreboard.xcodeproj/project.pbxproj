@@ -67,6 +67,7 @@
 		861F1FA329E3084F009C8648 /* AddPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPlayerView.swift; sourceTree = "<group>"; };
 		861F1FA529E31325009C8648 /* ScoreboardData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreboardData.swift; sourceTree = "<group>"; };
 		86791CE329E6A7AA008F5E1F /* ManageBoardGamesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageBoardGamesView.swift; sourceTree = "<group>"; };
+		86791CE529E7013F008F5E1F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		86DC0B2129E32B9000D5A4B6 /* boardgame.imageset */ = {isa = PBXFileReference; lastKnownFileType = folder; name = boardgame.imageset; path = Scoreboard/Assets.xcassets/boardgame.imageset; sourceTree = "<group>"; };
 		86DC0B2429E32BAB00D5A4B6 /* boardgame2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = boardgame2.png; sourceTree = "<group>"; };
 		86DC0B2529E32BAB00D5A4B6 /* boardgame2 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "boardgame2 1.png"; sourceTree = "<group>"; };
@@ -126,6 +127,7 @@
 		861F1F6F29E3065E009C8648 /* Scoreboard */ = {
 			isa = PBXGroup;
 			children = (
+				86791CE529E7013F008F5E1F /* Info.plist */,
 				861F1FA029E3081D009C8648 /* Models.swift */,
 				861F1F7029E3065E009C8648 /* ScoreboardApp.swift */,
 				861F1F7229E3065E009C8648 /* ContentView.swift */,
@@ -483,12 +485,12 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Scoreboard/Preview Content\"";
 				DEVELOPMENT_TEAM = 6DF93UDRBJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "Friendline Boardgame Scores";
+				INFOPLIST_FILE = Scoreboard/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "BGG Scoreboard";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -499,7 +501,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.01;
 				PRODUCT_BUNDLE_IDENTIFIER = com.friendlyboardgamesscoring;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -518,12 +520,12 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Scoreboard/Preview Content\"";
 				DEVELOPMENT_TEAM = 6DF93UDRBJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "Friendline Boardgame Scores";
+				INFOPLIST_FILE = Scoreboard/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "BGG Scoreboard";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -534,7 +536,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.01;
 				PRODUCT_BUNDLE_IDENTIFIER = com.friendlyboardgamesscoring;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

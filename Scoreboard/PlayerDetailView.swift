@@ -20,7 +20,9 @@ struct PlayerDetailView: View {
     
     var body: some View {
             List {
-                ForEach(scoreboardData.games.filter { $0.playerResults.contains(where: { $0.player == player }) }.sorted(by: { $0.date > $1.date }), id: \.id) { game in
+                ForEach(scoreboardData.games.filter { game in
+                    game.playerResults.contains { $0.player.id == player.id }
+                }.sorted { $0.date > $1.date }, id: \.id) { game in
                     HStack {
                         Text(game.name)
                         Spacer()

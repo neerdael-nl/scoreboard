@@ -31,8 +31,7 @@ struct MultiPicker<DataElement: Hashable, LabelView: View, ItemView: View>: View
 }
 
 struct AddGameView: View {
-    @Binding var players: [Player]
-    @Binding var games: [Game]
+    @EnvironmentObject var scoreboardData: ScoreboardData
     @State private var selectedPositions: [Player: Int] = [:]
     @State private var participatingPlayers: Set<Player> = []
     @Environment(\.presentationMode) var presentationMode
@@ -44,73 +43,62 @@ struct AddGameView: View {
     @State private var currentStep: Int = 1
     @State private var isExpanded = false
     @Binding var boardGames: [BGG]
-  
-    init(players: Binding<[Player]>, games: Binding<[Game]>, boardGames: Binding<[BGG]>) {
-        self._players = players
-        self._games = games
+    
+    init(boardGames: Binding<[BGG]>) {
         self._boardGames = boardGames // Update this line
         self._selectedGame = State(initialValue: boardGames.wrappedValue.first)
     }
     
     func gameSelectionView(scrollViewProxy: ScrollViewProxy) -> some View {
-        GeometryReader { geometry in
-            ZStack(alignment: .topTrailing) {
-                VStack {
-                    Text("Select Game")
-                        .font(.title)
-                        .padding()
-
-                    ScrollView {
-                        LazyVStack(alignment: .leading, spacing: 20) {
-                            ForEach(gameSections(), id: \.0) { section in
-                                Section(header: Text(section.0).frame(maxWidth: .infinity, alignment: .leading)) {
-                                    ForEach(section.1, id: \.id) { game in
-                                        Button(action: {
-                                            selectedGame = game
-                                        }) {
-                                            HStack {
-                                                Text(game.name)
-                                                Spacer()
-                                                if selectedGame?.id == game.id {
-                                                    Image(systemName: "checkmark")
-                                                        .foregroundColor(.blue)
-                                                }
-                                            }
-                                        }
+        HStack { // Add this HStack to wrap ScrollView and VStack
+            ScrollView {
+                LazyVStack(alignment: .leading) { // Dynamically set the spacing based on screenHeight
+                    ForEach(gameSections(), id: \.0) { section in
+                        Section(header: Text(section.0).frame(maxWidth: .infinity, alignment: .leading)) {
+                            ForEach(section.1, id: \.id) { game in
+                                Button(action: {
+                                    selectedGame = game
+                                }) {
+                                    HStack(alignment: .top) { // Set the alignment of HStack to .top
+                                        Text(game.name)
+                                            .lineLimit(nil) // Allow multiple lines
                                     }
+                                    .background(selectedGame == game ? Color(.systemGray4) : Color.clear)
                                 }
                             }
                         }
-                        .padding(.top)
                     }
                 }
-                .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
-
-                VStack {
-                    ForEach(0..<alphabet.count, id: \.self) { index in
-                        Button(action: {
-                            withAnimation {
-                                scrollToLetter(proxy: scrollViewProxy, at: index)
-                            }
-                        }) {
-                            Text(String(alphabet[index]))
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 4)
-                        }
-                    }
-                }
-                .background(Color(.systemGray6))
-                .cornerRadius(8)
-                .padding(.trailing)
             }
+            VStack(alignment: .trailing) {
+                ForEach(0..<alphabet.count, id: \.self) { index in
+                    Button(action: {
+                        withAnimation {
+                            scrollToLetter(proxy: scrollViewProxy, at: index)
+                        }
+                    }) {
+                        Text(String(alphabet[index]))
+                    }
+                }
+            }
+            .cornerRadius(8)
         }
-    }   
-
-
-
+    }
     
     var body: some View {
         VStack(alignment: .leading) {
+            HStack {
+                if currentStep > 1 {
+                    Button("Back") {
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                }
+                Spacer()
+                Text("Add Game")
+                Spacer()
+            }
+            .padding()
+            
             if currentStep == 1 {
                 ScrollViewReader { scrollViewProxy in
                     gameSelectionView(scrollViewProxy: scrollViewProxy)
@@ -122,16 +110,12 @@ struct AddGameView: View {
             } else if currentStep == 4 {
                 overviewView()
             }
-
+            
+            Spacer()
+            
             HStack {
-                if currentStep > 1 {
-                    Button("Previous") {
-                        currentStep -= 1
-                    }
-                }
-
                 Spacer()
-
+                
                 if currentStep < 4 {
                     Button("Next") {
                         if currentStep == 2 {
@@ -139,19 +123,21 @@ struct AddGameView: View {
                         }
                         currentStep += 1
                     }
-                    .disabled(currentStep == 1 && selectedGame == nil) // Change the validation condition here
+                    .disabled(currentStep == 1 && selectedGame == nil)
                 } else {
                     Button("Confirm") {
                         saveGame()
                         presentationMode.wrappedValue.dismiss()
                     }
-                    .disabled(participatingPlayers.isEmpty || selectedGame == nil) // Change the validation condition here
+                    .disabled(participatingPlayers.isEmpty || selectedGame == nil)
                 }
+                
+                Spacer()
             }
-            .padding()
         }
-        .padding()
     }
+    
+    
     
     func participantSelectionView() -> some View {
         VStack {
@@ -163,41 +149,39 @@ struct AddGameView: View {
                     Spacer()
                     Image(systemName: "chevron.down")
                 }
-                .padding()
-                .background(Color(.systemGray6))
                 .cornerRadius(8)
             }
             
             if isExpanded {
-                VStack(alignment: .leading) {
-                    ForEach(players, id: \.id) { player in
-                        Button(action: {
-                            if let index = selectedPlayers.firstIndex(of: player) {
-                                selectedPlayers.remove(at: index)
-                            } else {
-                                selectedPlayers.insert(player)
-                            }
-                        }) {
-                            HStack {
-                                Text(player.name)
-                                Spacer()
-                                if selectedPlayers.contains(player) {
-                                    Image(systemName: "checkmark")
-                                        .foregroundColor(.blue)
+                ScrollView {
+                    VStack(alignment: .leading) {
+                        ForEach(scoreboardData.players, id: \.id) { player in
+                            Button(action: {
+                                if let index = selectedPlayers.firstIndex(of: player) {
+                                    selectedPlayers.remove(at: index)
+                                } else {
+                                    selectedPlayers.insert(player)
+                                }
+                            }) {
+                                HStack {
+                                    Text(player.name)
+                                    Spacer()
+                                    if selectedPlayers.contains(player) {
+                                        Image(systemName: "checkmark")
+                                            .foregroundColor(.blue)
+                                    }
                                 }
                             }
+                            .cornerRadius(8)
                         }
-                        .padding()
-                        .background(Color(.systemGray6))
-                        .cornerRadius(8)
                     }
+                    .cornerRadius(8)
                 }
-                .background(Color(.systemGray6))
-                .cornerRadius(8)
             }
         }
-        .animation(.easeInOut(duration: 0.25))
+        .animation(.easeInOut(duration: 0.25), value: isExpanded)
     }
+    
     var isGameNameValid: Bool {
         return (selectedGame?.name ?? "").isEmpty && (selectedGameIndex > 0 || !participatingPlayers.isEmpty)
     }
@@ -207,7 +191,6 @@ struct AddGameView: View {
         VStack {
             Text("Assign positions")
                 .font(.headline)
-                .padding()
             
             List(participatingPlayers.sorted(by: { $0.name < $1.name }), id: \.id) { player in
                 HStack {
@@ -218,14 +201,14 @@ struct AddGameView: View {
                     }, set:     { newValue in
                         selectedPositions[player] = newValue
                     })) {
-                        ForEach(0...4, id: \.self) { position in
+                        let positions = Array(0...participatingPlayers.count)
+                        ForEach(positions, id: \.self) { position in
                             Text(position == 0 ? "0 (participated, no points)" : "\(ordinal(position)): \(position == 1 ? "1st" : position == 2 ? "2nd" : position == 3 ? "3rd" : "\(position)th")")
                                 .tag(position)
                         }
                     }
                     .pickerStyle(MenuPickerStyle())
                     .labelsHidden()
-                    .frame(width: 150)
                 }
             }
             .disabled(participatingPlayers.isEmpty)
@@ -257,17 +240,9 @@ struct AddGameView: View {
             
             Text("Date Played: \(formattedDate(gameDate))")
                 .padding(.top)
-            
-            
-            Button("Save Game") {
-                saveGame()
-                presentationMode.wrappedValue.dismiss()
-            }
-            .padding()
-            .disabled(participatingPlayers.isEmpty || !isGameNameValid)
-            
         }
     }
+    
     
     func formattedDate(_ date: Date) -> String {
         let formatter = DateFormatter()
@@ -296,9 +271,8 @@ struct AddGameView: View {
         }
     }
     
-    
     private func saveGame() {
-        if (selectedGame?.name ?? "").isEmpty == true || (selectedGame?.name ?? "").isEmpty || participatingPlayers.count < 2 || _games.wrappedValue.contains(where: { $0.name == selectedGame?.name || $0.name == selectedGame?.name }) {
+        if (selectedGame?.name ?? "").isEmpty || participatingPlayers.count < 2 || scoreboardData.games.contains(where: { $0.name == selectedGame?.name }) {
             showAlert = true
             return
         }
@@ -311,17 +285,19 @@ struct AddGameView: View {
         }
         
         let newGame = Game(name: selectedGame?.name ?? "", playerResults: playerResults)
-        games.append(newGame)
-        saveGamesToUserDefaults(games: games)
+        
+        // Update the environment object
+        scoreboardData.games.append(newGame)
+        saveGamesToUserDefaults(games: scoreboardData.games)
         
         for result in playerResults {
-            if let playerIndex = players.firstIndex(where: { $0.id == result.player.id }) {
-                players[playerIndex].totalPoints += result.score
-                players[playerIndex].gamesPlayed += 1
+            if let playerIndex = scoreboardData.players.firstIndex(where: { $0.id == result.player.id }) {
+                scoreboardData.players[playerIndex].totalPoints += result.score
+                scoreboardData.players[playerIndex].gamesPlayed += 1
             }
         }
         
-        savePlayersToUserDefaults(players: players)
+        savePlayersToUserDefaults(players: scoreboardData.players)
         presentationMode.wrappedValue.dismiss()
     }
 }

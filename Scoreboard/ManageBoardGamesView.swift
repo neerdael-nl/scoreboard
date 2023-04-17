@@ -10,7 +10,7 @@ struct ManageBoardGamesView: View {
     var body: some View {
         VStack {
             List {
-                ForEach(boardGames, id: \.id) { game in
+                ForEach(boardGames, id: \.name) { game in
                     Text(game.name)
                 }
                 .onDelete(perform: deleteGame)
@@ -19,6 +19,7 @@ struct ManageBoardGamesView: View {
             Button("Add Game") {
                 showingAddGameSheet.toggle()
             }
+            
             .sheet(isPresented: $showingAddGameSheet) {
                 VStack {
                     TextField("Game Name", text: $newGameName)
@@ -32,8 +33,9 @@ struct ManageBoardGamesView: View {
                             alertMessage = "Game already exists."
                             showAlert = true
                         } else {
-                            let newGame = BGG(id: UUID().uuidString, name: newGameName)
+                            let newGame = BGG(name: newGameName)
                             boardGames.append(newGame)
+                            boardGames = boardGames.sorted(by: { $0.name.lowercased() < $1.name.lowercased() }) // Sort boardGames
                             saveBGGToUserDefaults(boardGames: boardGames)
                             newGameName = ""
                             showingAddGameSheet.toggle()
@@ -51,6 +53,7 @@ struct ManageBoardGamesView: View {
 
     private func deleteGame(at offsets: IndexSet) {
         boardGames.remove(atOffsets: offsets)
+        boardGames = boardGames.sorted(by: { $0.name.lowercased() < $1.name.lowercased() }) // Sort boardGames
         saveBGGToUserDefaults(boardGames: boardGames)
     }
 }

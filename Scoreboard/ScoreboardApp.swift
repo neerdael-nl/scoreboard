@@ -14,18 +14,28 @@ struct ScoreboardApp: App {
     var body: some Scene {
         WindowGroup {
             ZStack {
-                Image("bg")
-                    .resizable()
-                    .scaledToFill()
-                    .edgesIgnoringSafeArea(.all)
-                
                 ContentView()
                     .environmentObject(scoreboardData)
                     .preferredColorScheme(.dark)
+                    .modifier(GlobalPaddingModifier(screenWidth: UIScreen.main.bounds.width, screenHeight: UIScreen.main.bounds.height))
             }
         }
     }
 }
+
+struct GlobalPaddingModifier: ViewModifier {
+    let screenWidth: CGFloat
+    let screenHeight: CGFloat
+
+    func body(content: Content) -> some View {
+        content
+            .padding(.leading, screenWidth * 0.05)
+            .padding(.trailing, screenWidth * 0.05)
+            .padding(.top, screenHeight * 0.05)
+            .padding (.bottom, screenHeight * 0.05)
+    }
+}
+
 
 
 struct BoardGame {
@@ -56,7 +66,7 @@ class BoardGameXMLParser: NSObject, XMLParserDelegate {
 
     func parser(_ parser: XMLParser, foundCharacters string: String) {
         if currentElement == "name" {
-            currentName += string
+            currentName += string.trimmingCharacters(in: .whitespacesAndNewlines)
         }
     }
 
@@ -69,17 +79,32 @@ class BoardGameXMLParser: NSObject, XMLParserDelegate {
 }
 
 func fetchBoardGames(username: String, completion: @escaping ([BGG]) -> Void) {
-    let urlString = "https://boardgamegeek.com/xmlapi2/collection?username=\(username)&own=1"
+    let urlString = "https://boardgamegeek.com/xmlapi2/collection?username=\(username)&own=1&excludesubtype=boardgameexpansion"
     guard let url = URL(string: urlString) else { return }
 
-    URLSession.shared.dataTask(with: url) { data, response, error in
+    var request = URLRequest(url: url)
+    request.timeoutInterval = 5
+
+    let task = URLSession.shared.dataTask(with: request) { data, response, error in
+        if let httpResponse = response as? HTTPURLResponse {
+            if httpResponse.statusCode == 202 {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                    fetchBoardGames(username: username, completion: completion)
+                }
+                return
+            }
+        }
+
         if let data = data {
             let parser = BoardGameXMLParser()
             let games = parser.parse(data: data)
             DispatchQueue.main.async {
-                completion(games.map { BGG(id: $0.id, name: $0.name) }) // Convert BoardGame to BGG
+                completion(games.map { BGG(name: $0.name) }) // Convert BoardGame to BGG
             }
         }
-    }.resume()
+    }
+    task.resume()
 }
+
+
 
